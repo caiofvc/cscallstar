@@ -25,7 +25,13 @@ Sistema completo para gerenciar jogadores e estatísticas do seu racha de basque
 - Lances livres (tentados/convertidos)
 - Turnovers (perdas de bola)
 
-## 🚀 Como Usar
+## 🌐 Sistema Online
+
+🎉 **Acesse o sistema online**: [Link será gerado após deploy no Vercel]
+
+📖 **Quer colocar no ar?** Leia o guia: **`DEPLOY.md`**
+
+## 🚀 Como Usar Localmente
 
 ### Pré-requisitos
 
@@ -98,9 +104,11 @@ Antes de usar o sistema, siga estes passos:
 
 ## 📁 Arquivos Importantes
 
-- **`COMO_USAR.md`** - ⭐ Guia rápido para começar (LEIA ESTE PRIMEIRO!)
+- **`DEPLOY.md`** - 🚀 Como colocar o sistema no ar (Vercel)
+- **`COMO_USAR.md`** - ⭐ Guia rápido para começar
 - **`SETUP_BANCO.md`** - Guia detalhado para configurar o banco de dados
 - **`SUPABASE_CONFIG.md`** - Guia completo de configuração do Supabase
+- **`CONTRIBUINDO.md`** - Guia para contribuidores
 - **`supabase-setup.sql`** - SQL para criar a tabela no Supabase
 - **`.env.example`** - Exemplo de arquivo de variáveis de ambiente
 - **`src/lib/supabase.ts`** - Configuração do cliente Supabase
