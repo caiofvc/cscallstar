@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Plus, Trash2, Edit2, TrendingUp, User, Loader2, LogOut } from 'lucide-react'
+import { Plus, User, Loader2, LogOut } from 'lucide-react'
 import { Player, PlayerStats } from './types'
 import PlayerCard from './components/PlayerCard'
 import PlayerForm from './components/PlayerForm'
