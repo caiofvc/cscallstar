@@ -16,11 +16,11 @@ export default function StatsModal({ player, onUpdate, onClose }: StatsModalProp
   }
 
   const increment = (key: keyof PlayerStats) => {
-    updateStat(key, stats[key] + 1)
+    updateStat(key, (stats[key] || 0) + 1)
   }
 
   const decrement = (key: keyof PlayerStats) => {
-    updateStat(key, stats[key] - 1)
+    updateStat(key, (stats[key] || 0) - 1)
   }
 
   const handleSave = () => {
