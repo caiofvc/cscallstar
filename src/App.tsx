@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Plus, User, Loader2, LogOut, PlayCircle } from 'lucide-react'
+import { Plus, User, Loader2, LogOut, PlayCircle, AlertTriangle } from 'lucide-react'
 import { Player, PlayerStats } from './types'
 import PlayerCard from './components/PlayerCard'
 import PlayerForm from './components/PlayerForm'
@@ -7,7 +7,7 @@ import StatsModal from './components/StatsModal'
 import QuickStatsPanel from './components/QuickStatsPanel'
 import LiveGameMode from './components/LiveGameMode'
 import Login from './components/Login'
-import { supabase } from './lib/supabase'
+import { supabase, hasSupabaseConfig } from './lib/supabase'
 import { authService } from './lib/auth'
 
 function App() {
@@ -193,6 +193,49 @@ function App() {
       setIsAuthenticated(false)
       setPlayers([])
     }
+  }
+
+  // Verificar se as variáveis de ambiente estão configuradas
+  if (!hasSupabaseConfig) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+        <div className="bg-red-900/30 backdrop-blur rounded-2xl p-8 w-full max-w-2xl border border-red-700 shadow-2xl">
+          <div className="text-center">
+            <AlertTriangle className="mx-auto text-red-400 mb-4" size={64} />
+            <h1 className="text-3xl font-bold text-white mb-4">Erro de Configuração</h1>
+            <div className="text-left bg-slate-900/50 rounded-lg p-6 mb-6">
+              <p className="text-red-300 mb-4 font-medium">
+                As variáveis de ambiente do Supabase não estão configuradas.
+              </p>
+              <p className="text-slate-300 mb-4">
+                <strong>No Vercel:</strong>
+              </p>
+              <ol className="list-decimal list-inside text-slate-300 space-y-2 ml-4">
+                <li>Acesse o dashboard do projeto no Vercel</li>
+                <li>Vá em <strong>Settings → Environment Variables</strong></li>
+                <li>Adicione as seguintes variáveis:</li>
+              </ol>
+              <div className="bg-slate-950 rounded p-4 mt-4 font-mono text-sm text-green-400">
+                <div>VITE_SUPABASE_URL = sua_url_do_supabase</div>
+                <div>VITE_SUPABASE_ANON_KEY = sua_chave_anonima</div>
+                <div>VITE_APP_PASSWORD = sua_senha_de_acesso</div>
+              </div>
+              <p className="text-slate-400 mt-4 text-sm">
+                Após configurar, faça um novo deploy ou aguarde o redeploy automático.
+              </p>
+            </div>
+            <a
+              href="https://vercel.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            >
+              Abrir Vercel Dashboard
+            </a>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   // Se não estiver autenticado, mostrar tela de login
