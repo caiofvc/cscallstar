@@ -79,10 +79,10 @@ export default function PlayerCard({ player, onEdit, onDelete, onViewStats }: Pl
 
       <button
         onClick={onViewStats}
-        className="w-full bg-slate-700 hover:bg-slate-600 text-white py-2 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors"
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors active:scale-95 shadow-lg"
       >
-        <TrendingUp size={18} />
-        Ver Estatísticas Completas
+        <TrendingUp size={20} />
+        Editar Stats
       </button>
     </div>
   )

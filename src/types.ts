@@ -12,6 +12,8 @@ export interface PlayerStats {
   lancesLivresConvertidos: number;
   turnovers: number;
   jogos: number;
+  airballs?: number;
+  cestas_contra?: number;
 }
 
 export interface Player {

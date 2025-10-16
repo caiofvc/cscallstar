@@ -6,8 +6,13 @@ Sistema completo para gerenciar jogadores e estatísticas do seu racha de basque
 
 - 🔐 **Login com Senha Única**: Acesso controlado para o grupo
 - ✅ **Cadastro de Jogadores**: Adicione jogadores com nome e apelido
+- 🎮 **Modo Ao Vivo**: Interface otimizada para registrar estatísticas durante as partidas
+- 📱 **Mobile-First**: Design otimizado para uso em celular durante os jogos
 - 📊 **Estatísticas Completas**: Acompanhe todas as estatísticas importantes incluindo tocos e roubos
+- ⚡ **Ações Rápidas**: Botões grandes para registro com 1 toque (cestas, rebotes, assistências)
 - 📈 **Percentuais Automáticos**: Cálculo automático de FG%, 3P% e FT%
+- ↩️ **Desfazer Ação**: Corrija erros rapidamente desfazendo a última ação
+- 📋 **Placar em Tempo Real**: Visualize os pontos de todos os jogadores durante a partida
 - ☁️ **Persistência em Nuvem**: Dados salvos no Supabase com timestamps
 - 🔄 **Sincronização em Tempo Real**: Dados atualizados automaticamente
 - 🎨 **Interface Moderna**: Design responsivo e intuitivo
@@ -72,9 +77,26 @@ Antes de usar o sistema, siga estes passos:
 1. Faça login com a senha (padrão: **cscallstar2025**)
 2. Clique em "Adicionar Jogador" para cadastrar os participantes do racha
 3. Preencha nome e apelido (opcional) de cada jogador
-4. Após os jogos, clique em "Ver Estatísticas Completas" no card do jogador
-5. Atualize as estatísticas usando os botões + e - ou digitando diretamente
-6. Clique em "Salvar Estatísticas" para registrar os dados
+
+### 🎮 Usando o Modo Ao Vivo (Durante a Partida)
+
+1. Clique no botão verde **"Iniciar Partida Ao Vivo"**
+2. Selecione o jogador que fez a ação
+3. Toque no botão correspondente à ação:
+   - **Cesta 2pts / 3pts**: Registra arremesso convertido
+   - **Errou 2pts / 3pts**: Registra arremesso perdido
+   - **Lance Livre**: Marca lances livres (convertidos ou errados)
+   - **Rebote / Assistência / Roubo / Toco**: Outras estatísticas
+4. Use **"Desfazer"** se cometer algum erro
+5. Visualize o placar em tempo real na parte inferior
+6. Ao final, feche o modo ao vivo - os dados já estão salvos!
+
+### ✏️ Editando Estatísticas Manualmente
+
+1. Clique em "Editar Stats" no card do jogador
+2. Use as abas "Principal" e "Arremessos" para navegar
+3. Ajuste os valores com os botões + e -
+4. Clique em "Salvar" para registrar as alterações
 
 ## 🛠️ Tecnologias
 
@@ -88,13 +110,20 @@ Antes de usar o sistema, siga estes passos:
 
 ## 📱 Interface
 
-- **Dashboard**: Visão geral com total de jogadores, jogos e pontos
-- **Cards de Jogadores**: Resumo rápido das principais estatísticas
-- **Modal de Estatísticas**: Interface completa para atualização de dados
-- **Responsivo**: Funciona perfeitamente em desktop, tablet e mobile
+- **Dashboard**: Visão geral com total de jogadores e acesso rápido ao modo ao vivo
+- **Modo Ao Vivo**: Tela dedicada com botões grandes para registro rápido durante partidas
+- **Quick Stats Panel**: Editor de estatísticas otimizado para mobile com abas e botões touch-friendly
+- **Cards de Jogadores**: Resumo rápido das principais estatísticas com acesso direto às edições
+- **Responsivo**: Design mobile-first que funciona perfeitamente em celular, tablet e desktop
+- **Gestos Otimizados**: Touch targets grandes (mínimo 44px) e feedback visual nas ações
 
 ## 💡 Dicas
 
+- **Durante os Jogos**: Use o Modo Ao Vivo para registro rápido com apenas 1 toque por ação
+- **Correções Rápidas**: O botão "Desfazer" permite corrigir erros imediatamente
+- **Mobile-First**: A interface foi otimizada para uso com uma mão no celular
+- **Sem Zoom Indesejado**: Os inputs têm tamanho mínimo de 16px para evitar zoom automático no iOS
+- **Placar Ao Vivo**: Veja os pontos de todos os jogadores em tempo real durante a partida
 - Os dados são salvos automaticamente no Supabase em nuvem
 - Cada jogador tem `created_at` e `updated_at` registrados automaticamente
 - Use o campo "Jogos" para registrar quando um jogador participa de uma partida

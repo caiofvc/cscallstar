@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
-import { Plus, User, Loader2, LogOut } from 'lucide-react'
+import { Plus, User, Loader2, LogOut, PlayCircle } from 'lucide-react'
 import { Player, PlayerStats } from './types'
 import PlayerCard from './components/PlayerCard'
 import PlayerForm from './components/PlayerForm'
 import StatsModal from './components/StatsModal'
+import QuickStatsPanel from './components/QuickStatsPanel'
+import LiveGameMode from './components/LiveGameMode'
 import Login from './components/Login'
 import { supabase } from './lib/supabase'
 import { authService } from './lib/auth'
@@ -17,6 +19,8 @@ function App() {
   const [error, setError] = useState<string | null>(null)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [authLoading, setAuthLoading] = useState(false)
+  const [liveGameMode, setLiveGameMode] = useState(false)
+  const useQuickStats = true // Sempre usa o painel rápido otimizado para mobile
 
   // Verificar autenticação ao carregar
   useEffect(() => {
@@ -38,20 +42,10 @@ function App() {
         .order('created_at', { ascending: false })
 
       if (error) throw error
-      setPlayers(data || [])
-    } catch (err: any) {
-      setError(err.message)
-      console.error('Erro ao carregar jogadores:', err)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const addPlayer = async (nome: string, apelido?: string) => {
-    try {
-      const newPlayer = {
-        nome,
-        apelido,
+      
+      // Adicionar stats vazias para compatibilidade (estrutura nova não tem stats no player)
+      const playersWithStats = (data || []).map(player => ({
+        ...player,
         stats: {
           pontos: 0,
           rebotes: 0,
@@ -66,7 +60,26 @@ function App() {
           lancesLivresConvertidos: 0,
           turnovers: 0,
           jogos: 0,
-        },
+          airballs: 0,
+          cestas_contra: 0,
+        }
+      }))
+      
+      setPlayers(playersWithStats)
+    } catch (err: any) {
+      setError(err.message)
+      console.error('Erro ao carregar jogadores:', err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const addPlayer = async (nome: string, apelido?: string) => {
+    try {
+      const newPlayer = {
+        nome,
+        apelido,
+        ativo: true
       }
 
       const { data, error } = await supabase
@@ -76,7 +89,28 @@ function App() {
 
       if (error) throw error
       if (data) {
-        setPlayers([data[0], ...players])
+        // Adicionar stats vazias localmente para compatibilidade com o código atual
+        const playerWithStats = {
+          ...data[0],
+          stats: {
+            pontos: 0,
+            rebotes: 0,
+            assistencias: 0,
+            roubos: 0,
+            tocos: 0,
+            arremessosTentados: 0,
+            arremessosConvertidos: 0,
+            arremessos3Tentados: 0,
+            arremessos3Convertidos: 0,
+            lancesLivresTentados: 0,
+            lancesLivresConvertidos: 0,
+            turnovers: 0,
+            jogos: 0,
+            airballs: 0,
+            cestas_contra: 0,
+          }
+        }
+        setPlayers([playerWithStats, ...players])
       }
       setShowForm(false)
     } catch (err: any) {
@@ -123,18 +157,17 @@ function App() {
   }
 
   const updateStats = async (id: string, stats: PlayerStats) => {
+    // NOTA: Com a nova estrutura, stats são salvos por jogo em game_stats
+    // Esta função agora apenas atualiza localmente para compatibilidade
+    // Use o LiveGameMode para registrar estatísticas de jogos
     try {
-      const { error } = await supabase
-        .from('players')
-        .update({ stats })
-        .eq('id', id)
-
-      if (error) throw error
-
+      // Atualizar apenas localmente (não persiste no banco)
       setPlayers(players.map(p => 
         p.id === id ? { ...p, stats } : p
       ))
       setStatsPlayer(null)
+      
+      alert('⚠️ Atenção: Estatísticas não foram salvas no banco!\nUse o "Modo Ao Vivo" para registrar jogos e estatísticas.')
     } catch (err: any) {
       alert('Erro ao atualizar estatísticas: ' + err.message)
       console.error('Erro:', err)
@@ -225,11 +258,18 @@ function App() {
           </div>*/}
         </div>
 
-        {/* Add Player Button */}
-        <div className="mb-6">
+        {/* Action Buttons */}
+        <div className="mb-6 flex flex-col sm:flex-row gap-3">
+          <button
+            onClick={() => setLiveGameMode(true)}
+            className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg text-lg"
+          >
+            <PlayCircle size={24} />
+            Iniciar Partida Ao Vivo
+          </button>
           <button
             onClick={() => setShowForm(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium flex items-center gap-2 transition-colors"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors"
           >
             <Plus size={20} />
             Adicionar Jogador
@@ -290,10 +330,26 @@ function App() {
         )}
 
         {statsPlayer && (
-          <StatsModal
-            player={statsPlayer}
-            onUpdate={(stats) => updateStats(statsPlayer.id, stats)}
-            onClose={() => setStatsPlayer(null)}
+          useQuickStats ? (
+            <QuickStatsPanel
+              player={statsPlayer}
+              onUpdate={(stats) => updateStats(statsPlayer.id, stats)}
+              onClose={() => setStatsPlayer(null)}
+            />
+          ) : (
+            <StatsModal
+              player={statsPlayer}
+              onUpdate={(stats) => updateStats(statsPlayer.id, stats)}
+              onClose={() => setStatsPlayer(null)}
+            />
+          )
+        )}
+
+        {liveGameMode && (
+          <LiveGameMode
+            players={players}
+            onUpdate={updateStats}
+            onClose={() => setLiveGameMode(false)}
           />
         )}
       </div>
